@@ -1,0 +1,26 @@
+{
+  "name": "brain-game",
+  "version": "1.1.0",
+  "description": "An interactive quiz game to be used in the classroom.",
+  "main": "server.js",
+  "scripts": {
+    "client-install": "npm install --prefix client",
+    "start": "node server.js",
+    "server": "NODE_ENV=development nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "deploy": "npm run build --prefix client && NODE_ENV=production node server.js"
+  },
+  "author": "Sven Zetterlund",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^5.1.0",
+    "create-react-app": "^3.4.1",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.6",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}

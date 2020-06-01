@@ -1,0 +1,39 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  section {
+    position: fixed;
+    background: #FFF;
+    color: #000;
+    width: 80%;
+    height: 70%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    padding: 10px;
+    border-radius: 3px;
+    .content {
+      position: relative;
+      height: calc(100% - 50px);
+      overflow: auto;
+      overflow-x: hidden;
+      ol {
+        padding-left: 30px;
+      }
+    }
+    .close-modal {
+      margin: 15px auto;
+      display: block;
+      box-shadow: none;
+      font-size: 1.1em;
+      letter-spacing: 0;
+      box-sizing: border-box;
+      border-color: rgb(221, 221, 221);
+    }    
+  }
+}

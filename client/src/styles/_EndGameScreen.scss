@@ -1,0 +1,73 @@
+#EndGameScreen {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  #winner-section {
+    margin-top: 1em;
+    flex-grow: 1;
+    position: relative;
+    display: flex-start;
+    flex-direction: column;
+    justify-content: center;
+
+    $team-color: var(--data-color);
+
+    h1, p {
+      text-align: center;
+      margin: 0;
+
+      $color: rgba(0,0,0,0.5);
+      $blur: 4px;
+      $distance: 2px;
+      text-shadow:
+        $distance $distance 0px $color,
+        $distance*1 $distance*1 $blur $color,
+        $distance*-1 $distance*1 $blur $color,
+        $distance*1 $distance*-1 $blur $color,
+        $distance*-1 $distance*-1 $blur $color,
+      ;      
+    }
+    h1 {
+      // color: #00c8ff;
+      color: $team-color;
+      font-size: 2em;
+      line-height: 1em;
+      position: relative;
+      @media #{$desktop} {
+        font-size: 3em;
+      }
+    }
+    p {
+      margin-top: 5px;
+      font-weight: bold;
+      text-transform: uppercase;
+      @media #{$desktop} {
+        font-size: 1.6em;
+      }
+    }
+    #svg-trophy {
+      margin-top: 20px;
+      background-position: center;
+      display: block;
+      height: 200px;
+      min-width: 250px;
+      width: 100%;  
+      background-repeat: no-repeat;
+      background-image: $svg-trophy;
+      background-size: 200px;
+    }
+  }
+
+  #admin-bar {
+    display: flex;
+    flex-direction: column;
+    // margin-bottom: 2rem;
+    button {
+      margin: 5px auto;
+    }
+  }
+
+
+}
