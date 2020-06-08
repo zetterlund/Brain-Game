@@ -1,0 +1,89 @@
+
+#HowItWorks {
+  box-sizing: border-box;
+  background-color: white;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-top: calc(2.2rem + 20px);
+  padding-right: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  overflow: hidden;
+
+  #back-button a {
+
+    color: white;
+    background-color: #114780;
+
+    min-width: 6.5em;
+    padding: .15em .4em;
+    padding-left: 2em;
+    text-align: center;
+    
+    border-style: solid; 
+    border-width: 2px;
+    border-radius: 1px;
+    $border-light: rgba(255,255,255,0.15);
+    $border-dark: rgba(0,0,0,0.15);
+    border-color:
+      $border-light
+      $border-dark
+      $border-dark
+      $border-light;
+    box-shadow: 1px 2px 2px rgba(0,0,0,0.15), 2px 4px 4px rgba(0,0,0,0.15);
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px;
+    z-index: 1;
+
+    &::before {
+      content: '🠀';
+      position: absolute;
+      top: calc(70% - 5px);
+      padding-left: 5px;
+      height: 0;
+      left: 0;
+      line-height: 0;
+      font-size: 1.5em;
+    }
+
+    @media #{$desktop} {
+      transform: translateX(50%);
+      left: auto;
+      right: calc(20%);
+      bottom: 25%;
+    }
+
+  }
+
+
+  #animation-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    // overflow: hidden;
+
+    #animation {
+      position: absolute;
+      top: 10px;
+      right: 0;
+      width: auto;
+      height: auto;      
+      max-height: 90%;
+      // min-width: 350px;
+      max-width: 100%;
+
+      @media #{$desktop} {
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 80%;
+      }
+    }
+  }
+
+}

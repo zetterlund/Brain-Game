@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 import Instructions from './Instructions';
 
 
@@ -45,7 +46,9 @@ export default class WelcomeScreen extends Component {
           <img src="images/logo1.gif" alt="Brain Game" />          
         </div>
         <p>Welcome to the Brain Game!</p>
-        <p>This project is still under development.  You can read details on the project <a href="#">here</a>.</p>
+        <p>
+          <Link to="/how-it-works">How it Works</Link>
+        </p>
         <p><span className="link" onClick={this.showInstructions}>View Instructions</span></p>
         <Instructions
           show={this.state.showInstructions}
