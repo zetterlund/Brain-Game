@@ -1,4 +1,4 @@
-const generateQuestionSet = (courses, requestedQuestionCount, existingQuestionIDs) => {
+export default function generateQuestionSet(courses, requestedQuestionCount, existingQuestionIDs) {
   return new Promise((resolve, reject) => {
     fetch('api/questions/generateQuestions', {
       method: 'post',
@@ -17,7 +17,3 @@ const generateQuestionSet = (courses, requestedQuestionCount, existingQuestionID
       .catch(err => console.log(err)); //// Add proper error handling here
   });
 }
-
-
-
-export default generateQuestionSet;

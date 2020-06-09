@@ -3,7 +3,7 @@ import toaster from 'toasted-notes';
 
 
 
-function notification(type, text, duration) {
+export default function notification(type, text, duration) {
   toaster.notify(({ onClose }) => (
     <div className={ `notification notification-${ type }` }>
       <div className="content">{ text }</div>
@@ -18,7 +18,3 @@ function notification(type, text, duration) {
     </div>
   ), { duration });
 }
-
-
-
-export default notification;

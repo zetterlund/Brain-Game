@@ -3,10 +3,6 @@ function randomChoice(p) {
   return p.findIndex( a => (rnd -= a) < 0 );
 }
 
-function randomChoices(p, count) {
+export default function randomChoices(p, count) {
   return Array.from(Array(count), randomChoice.bind(null, p));
 }
-
-
-
-export default randomChoices;
