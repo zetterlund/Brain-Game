@@ -2,7 +2,7 @@ const IMG_URI_PREFIX = process.env.REACT_APP_IMG_URI_PREFIX;
 
 
 
-function preloadQuestionMedia(props) {
+export default function preloadQuestionMedia(props) {
   const nextQuestion = props.questions[props.currentQuestionIndex + 1];
   // Check if next question exists
   if (nextQuestion) {
@@ -16,7 +16,3 @@ function preloadQuestionMedia(props) {
     }
   }
 }
-
-
-
-export default preloadQuestionMedia;
