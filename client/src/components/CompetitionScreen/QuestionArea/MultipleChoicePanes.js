@@ -24,14 +24,14 @@ export default function MultipleChoicePanes(props) {
   return (
     <div id="MultipleChoicePanes">
       {Object.values(props.choices).map(c => (
-        <div className="pane-container">
+        <div key={c.choiceID} className="pane-container">
           <CSSTransition
             key={c.choiceID}
             timeout={0}
             classNames={`transition-pane-${c.choiceID}`}
             in={props.questionRefreshed}
           >
-            <div key={c.choiceID} className="pane">
+            <div className="pane">
               <div className="choice-label">{c.label}</div>
               <div className="choice-content">{paneItem(c)}</div>
             </div>
