@@ -1,6 +1,12 @@
 import React, { Component, Fragment } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 import 'styles/App.scss';
+import HowItWorks from 'components/HowItWorks';
 import WelcomeScreen from 'components/WelcomeScreen/WelcomeScreen';
 import GameSetup from 'components/GameSetup/GameSetup';
 import CompetitionScreen from 'components/CompetitionScreen/CompetitionScreen';
@@ -348,60 +354,69 @@ export default class App extends Component {
   }
 
   render = () => (
-    <Fragment>
-      <nav className="navbar">
-        <h1>Brain Game</h1>
-      </nav>  
-      <div id="App">
-        {this.state.status === 'welcome' &&
-          <WelcomeScreen
-            handleJoinRoomRequest={(a) => this.handleJoinRoomRequest(a)}
-            beginSetup={() => this.beginSetup()}
-          />
-        }
-        {this.state.status === 'setup' && 
-          <GameSetup
-            setupOptions={this.state.setupOptions}
-            gameConfigObject={this.state.gameConfigObject}
-            allQuestions={this.state.allQuestions}
-            beginCompetitionRequest={gameInfo => this.handleBeginCompetitionRequest(gameInfo)}
-            roomCode={this.state.roomCode}
-            users={this.state.users}
-            userRole={this.state.users[this.state.sid].role}
-            sid={this.state.sid}
-            leaveRoomRequest={() => this.handleLeaveRoomRequest()}
-          />
-        }
-        {this.state.status === 'competition' &&
-          <CompetitionScreen
-            questions={this.state.gameStateObject.questions}
-            gameOptions={this.state.gameStateObject.gameOptions}
-            teams={this.state.gameStateObject.teams}
-            currentQuestionIndex={this.state.gameStateObject.currentQuestionIndex}
-            reachedMaxQuestions={this.state.gameStateObject.reachedMaxQuestions}
-            answerRevealed={this.state.gameStateObject.answerRevealed}
-            userRole={this.state.users[this.state.sid].role}
-            togglePrivateAnswer={() => this.handleTogglePrivateAnswer()}
-            updateGameRequest={a => this.handleUpdateGameRequest(a)}
-            addAdditionalQuestionsRequest={() => this.handleAddAdditionalQuestionsRequest()}
-            broadcastNotification={m => this.broadcastNotification(m)}
-            endGameRequest={() => this.handleEndGameRequest()}
-            resetGameRequest={() => this.handleResetGameRequest()}
-            leaveRoomRequest={() => this.handleLeaveRoomRequest()}
-          />
-        }
-        {this.state.status === 'endgame' && 
-          <EndGameScreen
-            teams={this.state.gameStateObject.teams}
-            resetGameRequest={() => this.handleResetGameRequest()}
-            leaveRoomRequest={() => this.handleLeaveRoomRequest()}
-          />
-        }
-        <footer className="footer">
-            <span>Powered by Promethium</span>
-            <img src="images/promethium_logo.gif" alt="Promethium" />
-        </footer>
-      </div>
-    </Fragment>
+    <Router>
+      <Fragment>
+        <nav className="navbar">
+          <h1>Brain Game</h1>
+        </nav>
+        <Switch>
+          <Route path="/how-it-works">
+            <HowItWorks />
+          </Route>
+          <Route path="/">
+            <div id="App">
+              {this.state.status === 'welcome' &&
+                <WelcomeScreen
+                  handleJoinRoomRequest={(a) => this.handleJoinRoomRequest(a)}
+                  beginSetup={() => this.beginSetup()}
+                />
+              }
+              {this.state.status === 'setup' && 
+                <GameSetup
+                  setupOptions={this.state.setupOptions}
+                  gameConfigObject={this.state.gameConfigObject}
+                  allQuestions={this.state.allQuestions}
+                  beginCompetitionRequest={gameInfo => this.handleBeginCompetitionRequest(gameInfo)}
+                  roomCode={this.state.roomCode}
+                  users={this.state.users}
+                  userRole={this.state.users[this.state.sid].role}
+                  sid={this.state.sid}
+                  leaveRoomRequest={() => this.handleLeaveRoomRequest()}
+                />
+              }
+              {this.state.status === 'competition' &&
+                <CompetitionScreen
+                  questions={this.state.gameStateObject.questions}
+                  gameOptions={this.state.gameStateObject.gameOptions}
+                  teams={this.state.gameStateObject.teams}
+                  currentQuestionIndex={this.state.gameStateObject.currentQuestionIndex}
+                  reachedMaxQuestions={this.state.gameStateObject.reachedMaxQuestions}
+                  answerRevealed={this.state.gameStateObject.answerRevealed}
+                  userRole={this.state.users[this.state.sid].role}
+                  togglePrivateAnswer={() => this.handleTogglePrivateAnswer()}
+                  updateGameRequest={a => this.handleUpdateGameRequest(a)}
+                  addAdditionalQuestionsRequest={() => this.handleAddAdditionalQuestionsRequest()}
+                  broadcastNotification={m => this.broadcastNotification(m)}
+                  endGameRequest={() => this.handleEndGameRequest()}
+                  resetGameRequest={() => this.handleResetGameRequest()}
+                  leaveRoomRequest={() => this.handleLeaveRoomRequest()}
+                />
+              }
+              {this.state.status === 'endgame' && 
+                <EndGameScreen
+                  teams={this.state.gameStateObject.teams}
+                  resetGameRequest={() => this.handleResetGameRequest()}
+                  leaveRoomRequest={() => this.handleLeaveRoomRequest()}
+                />
+              }
+              <footer className="footer">
+                  <span>Powered by Promethium</span>
+                  <img src="images/promethium_logo.gif" alt="Promethium" />
+              </footer>
+            </div>
+          </Route>
+        </Switch>
+      </Fragment>
+    </Router>
   )
 }
