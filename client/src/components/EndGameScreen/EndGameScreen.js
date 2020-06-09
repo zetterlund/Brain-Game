@@ -1,41 +1,57 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 
 
-export default class EndGameScreen extends Component {
+export default function EndGameScreen(props) {
 
-  constructor(props) {
-    super(props);
-    this.state = {};
+  window.scrollTo(0, 0);
+
+  /* Calculate which team(s) won */
+  const getWinningTeams = () => {
+
+    // Calculate high score
+    const highScore = Object.values(props.teams).reduce((prev, current) => {
+      return current.score > prev ? current.score : prev
+    }, 0);
+
+    // Return list of all teams with that score
+    const winningTeams = Object.values(props.teams).filter(team => team.score === highScore);
+    return winningTeams;
   }
 
-  componentDidMount = () => {
-    window.scrollTo(0, 0);
-  }
+  const winnerSection = () => {
 
-  render() {
-    // Calculate which team won
-    const winningTeam = Object.values(this.props.teams)
-      .reduce((prev, current) => {
-        return current.score > prev.score ? current : prev
-      });
+    const winningTeams = getWinningTeams();
 
-    const { teamName, teamColor } = winningTeam;
-
-    return (
-      <div id="EndGameScreen">
-        <div id="finished"></div>
+    // If there is a tie between multiple teams
+    if (winningTeams.length > 1) {
+      return (
+        <div id="winner-section">
+          <h1>Tie!</h1>
+          <p>Game over</p>
+        </div>
+      );
+    }
+    // If only one team won
+    else {
+      const { teamName, teamColor } = winningTeams[0];
+      return (
         <div id="winner-section" style={{ "--data-color": teamColor }}>
           <h1>{ teamName }</h1>
           <p>has won the game!</p>
           <div id="svg-trophy" />
-        </div>
-        <div id="admin-bar">
-          <button className="green-button" onClick={this.props.resetGameRequest}>Play Again</button>
-          <button onClick={this.props.leaveRoomRequest}>Exit Game</button>
-        </div>
-      </div>
-    );    
+        </div>      
+      );      
+    }
   }
 
+  return (
+    <div id="EndGameScreen">
+      { winnerSection() }
+      <div id="admin-bar">
+        <button className="green-button" onClick={props.resetGameRequest}>Play Again</button>
+        <button onClick={props.leaveRoomRequest}>Exit Game</button>
+      </div>
+    </div>
+  );
 }
