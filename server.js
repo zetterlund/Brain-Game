@@ -4,7 +4,7 @@ const server = require('http').Server(app);
 const socketIO = require('socket.io');
 const path = require('path');
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8002;
 
 
 
@@ -20,15 +20,11 @@ app.use(express.urlencoded({ extended: false }));
 
 
 /* Routes */
-
-// (Simulate production domain subdirectory while in development)
-const subd = require('./config/deployment').subdirectory;
-
-const questions = require('./routes/api/questions');
-app.use(subd+'/api/questions', questions);
-
-const getSetupOptions = require('./routes/api/getSetupOptions');
-app.use(subd+'/api/getSetupOptions', getSetupOptions);
+const subRouter = express.Router();
+subRouter.use('/api/questions', require('./routes/api/questions'));
+subRouter.use('/api/getSetupOptions', require('./routes/api/getSetupOptions'));
+// (Simulate production domain subdirectory while in development.  Otherwise, remove 'subRouter' and attach routes directly to 'app')
+app.use(require('./config/deployment').subdirectory, subRouter);
 
 
 
