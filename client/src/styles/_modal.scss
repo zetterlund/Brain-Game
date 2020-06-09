@@ -6,6 +6,7 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
   z-index: 10;
+
   section {
     position: fixed;
     background: #FFF;
@@ -17,15 +18,18 @@
     transform: translate(-50%,-50%);
     padding: 10px;
     border-radius: 3px;
+
     .content {
       position: relative;
       height: calc(100% - 50px);
       overflow: auto;
       overflow-x: hidden;
+
       ol {
         padding-left: 30px;
       }
     }
+    
     .close-modal {
       margin: 15px auto;
       display: block;

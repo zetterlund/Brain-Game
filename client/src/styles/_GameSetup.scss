@@ -1,20 +1,14 @@
 #GameSetup {
-  /*padding: 10px 5px 80px 5px;*/
   flex-grow: 1;
-
   display: flex;
   flex-direction: column;
-  // align-items: stretch;
-
 
   > button {
     align-self: center;
     margin: 5px 0;
   }
 
-
   .room-code {
-
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -30,13 +24,6 @@
     /* Styles individual to each span */
     span:nth-child(1) {
       order: 2;
-      // flex-basis: 100%;
-      // &::before {
-      //   content: '(';
-      // }
-      // &::after {
-      //   content: ')';
-      // }
     }
     span:nth-child(2) {
       order: 1;
@@ -78,7 +65,6 @@
     }
 
   }
-
 
 
 
@@ -187,10 +173,8 @@
 
 
 
-
     /* --- Course Selection container --- */
     #course-selection {
-      // flex-grow: 1;
 
       > div:nth-child(odd) {
         background-color: rgba(200,200,200,0.15);
@@ -203,18 +187,14 @@
 
       .course-item {
         padding: 10px;
-        // box-sizing: border-box;
         margin: 10px auto;
         border-radius: 3px;
         border: 1px solid;
 
         display: grid;
         grid-auto-flow: dense;
-        // grid-template-columns: 75px auto 50px;
         grid-template-columns: 125px minmax(50px, 1fr) 30px;
-        // grid-template-rows: 100px;
         grid-gap: 5px;
-        // justify-content: start;
 
         > div {
           &::before {
@@ -244,7 +224,6 @@
             height: 25px;
             box-sizing: border-box;
             text-align: center;
-            // vertical-align: top;
             input {
               width: 100%;
               height: 100%;
@@ -254,15 +233,12 @@
             label {
               font-size: 0.9em;
               display: block;
-              // line-height: 5px;
-              // vertical-align: top;
             }
           }    
         }
         .frequency {
           grid-column: 2 / 4;
           padding-left: 10px;
-          // padding-right: 10px;
           .frequency-slider {
             input {
               width: 100%;
@@ -272,16 +248,9 @@
         }
         .delete {
           grid-column: 3 / 4;
-          // grid-row: span 2;
-          // width: 100%;
-
-          // display: flex;
-          // align-items: flex-start;
-          // justify-items: center;
           text-align: center;
 
           button {
-            // margin: 1.15em auto 0 auto;
             margin: auto;
           }
 
@@ -289,24 +258,10 @@
             /* Hide the 'Delete' label above button */
             visibility: hidden;
           }
-
-          // height: 200px;
-          // height: 100%;
         }
 
-
       }
-
-
-      /* Large screens */
-      @media screen and (min-width: 600px) {
-        // grid-template-columns: 1fr minmax(75px, auto) 1fr minmax(auto, 50px);
-
-        // .subject {
-        //   grid-column: 1 / span 1;
-        // }
-
-      }  
+ 
     }
   }
 
@@ -364,8 +319,6 @@
 
 
 
-
-
 /* --- Transitions --- */
 
 #GameSetup {
@@ -402,12 +355,4 @@
     // transition: 1000ms;
   }
 
-
 }
-
-
-
-
-
-
-

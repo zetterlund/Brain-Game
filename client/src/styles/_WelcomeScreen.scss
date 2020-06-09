@@ -1,7 +1,3 @@
-
-
-
-
 #WelcomeScreen {
   flex-grow: 1;
 
@@ -21,6 +17,7 @@
 
   #welcome-to-the-jungle {
     text-align: center;
+
     button {
       font-size: 1.7rem;
       font-weight: 600;
@@ -32,20 +29,9 @@
     text-align: center;
 
     #room-code-row {
-      // display: flex;
-      // flex-wrap: wrap;
       width: 200px;
       margin: 0 auto;
       justify-content: center;
-    }
-
-    label {
-      // position: absolute;
-      // right: 100%;
-      // width: 200px;
-
-      // margin: 4px 5px 0 0;
-      // text-align: right;
     }
 
     input[type="text"] {
@@ -56,15 +42,9 @@
       border-radius: 2rem;
       box-shadow: .1rem .2rem .2rem 0rem rgba(0,0,0,0.4) inset;
       font-family: 'Roboto Mono';
-      // font-weight: 500;
       font-size: 1.1rem;
-      // font-weight: bold;
       letter-spacing: 0rem;
       text-transform: uppercase;
-    }
-
-    input[type="submit"] {
-
     }
 
     @media screen and (min-width: 600px) {
@@ -82,7 +62,5 @@
         // }
       }
     }
-
   }
-
 }

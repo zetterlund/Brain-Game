@@ -1,46 +1,43 @@
 #CompetitionScreen {
 
-  /* --- Top-level layout --- */
-
-  // padding: 10px 5px 80px 5px;
   flex-grow: 1;
   min-height: calc(100vh - 3rem);
   display: flex;
   flex-direction: column;
-  // align-items: stretch;
-  // justify-content: center;
+
+  /* --- Top-level layout --- */
+
   #QuestionArea {
     flex-grow: 1;
-    /*min-height: 800px;*/
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
   }
+
   #bottom-panel {
     display: flex;
     flex-direction: column;
-    // justify-content: center;
     align-items: stretch;
-    /*bottom: 70%;*/
-    /*width: 100%;*/
-    /*position: absolute;*/
-    /*flex-grow: 1;*/
-    /*flex-shrink: 1;*/
-  }  
+  }
+
   #Scoreboard {
     display: flex;
     margin-bottom: 10px;
     flex-wrap: wrap;  
-  }  
-  #GameControlBar {
-    margin: 5px auto;
   }
-  #AdminBar {
+
+  #MobileControl {
     margin: 0 auto;
   }
 
+  #GameControlBar {
+    margin: 5px auto;
+  }
 
+  #AdminBar {
+    margin: 0 auto;
+  }
 
 
 
@@ -140,12 +137,8 @@
       top: 0;
       transition: opacity 500ms, top 500ms;
       transition-delay: 200ms;
-      transition-timing-function: ease, cubic-bezier(.21,1.5,.74,.9);
-      // margin-top: 20px;
-      // position: relative;
-      // top: 0px;      
+      transition-timing-function: ease, cubic-bezier(.21,1.5,.74,.9);    
     }
-
 
     /* --- Question formats have various styles that deviate from the defaults defined above.  These variations are defined below. --- */
 
@@ -241,7 +234,6 @@
         opacity: 1;
         transition: opacity 700ms, top 700ms;
         transition-timing-function: ease, cubic-bezier(.21,2,.44,.81);
-        // margin-top: 20px;
         position: relative;
         top: 0px;
       }
@@ -253,9 +245,6 @@
           @include transition-pane-enter-done(#{$key});
           transition-delay: 120ms * $key; // Cannot include "transition-delay" property as a part of "transition-pane-enter-done" mixin because SASS treats parameter as string and cannot perform math on it
         }
-        // .transition-pane-#{$key}-enter-done {
-        //   position: relative;
-        // }
       }
     }
 
@@ -270,8 +259,6 @@
         }
       }
     }
-
-
   }
 
 
@@ -308,20 +295,16 @@
 
         .score {
           font-size: 3em;
-          // border: 1px solid #999;
-          // display: inline-block;
-          // width: 100%;
           line-height: 60px;
           margin: 0 auto;
         }
+
         .increment-buttons {
-          // display: inline-block;
           position: absolute;
           padding: 0;
           margin: 0;
           left: 100%;
-          /*vertical-align: top;*/
-          /*margin: 10px 0 0 5px;*/
+
           input {
             display: block;
             color: #FFF;    
@@ -347,13 +330,37 @@
 
 
 
+  #MobileControl {
+    button {
+      font-style: oblique;
+      font-weight: bold;
+      padding: 0.5em;
+      transition: 350ms;
+
+      &:focus {
+        outline: none;
+      }
+
+      &.show {
+        background-color: #0a5200;
+        color: white;
+      }
+
+      &.hide {
+        background-color: #ff7c7c;
+        color: black;
+      }
+    }
+  }
+
+
+
   #GameControlBar {
     width: 100%;
     max-width: 500px;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    // align-items: center;
 
     > button {
       position: relative;
@@ -362,14 +369,10 @@
       flex-grow: 1;
       padding-top: 5px;
       padding-bottom: 5px;
-      // width: 100%;
-      // box-sizing: border-box;
-      // flex-basis: 1;
-      // flex-grow: 1;
 
       &[id="reveal-answer"] {
         background-color: white;
-        color: #00262e;
+        color: #003e1d;
       }
 
       &[id="prev-question"] {
@@ -384,6 +387,7 @@
           font-size: 1.5em;
         }        
       }
+
       &[id="next-question"] {
         padding-right: 2em;
         &::after {
@@ -399,9 +403,7 @@
     }
 
     #reveal-answer {
-      // font-size: 1.3em;
       font-weight: 900;
-      // flex-grow: 1;
     }
   }
 
@@ -410,7 +412,6 @@
   #AdminBar {
     width: 100%;
     max-width: 500px;
-    // flex-grow: 1;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -420,7 +421,6 @@
       color: white;
     }
   }
-
 
 
 
@@ -443,7 +443,6 @@
           flex-direction: row;
           flex-wrap: wrap;
           justify-content: space-evenly;
-          // margin: 15px auto;
         }
 
         .pane {
@@ -456,13 +455,7 @@
             }
           }
         }
-
       }
-
     }
-
   }
-
-
-
 }
