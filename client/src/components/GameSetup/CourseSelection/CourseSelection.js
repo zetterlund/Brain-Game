@@ -35,18 +35,18 @@ class CourseSelection extends Component {
         {courses: [
           {
             subject: 'Math',
-            difficulty: [2, 3],
-            frequency: 15,
+            difficulty: [2, 3, 4],
+            frequency: 10,
           },
           {
             subject: 'Geography',
-            difficulty: [1, 2, 3, 4],
-            frequency: 15,
+            difficulty: [2, 3, 4],
+            frequency: 10,
           },
           {
             subject: 'Trivia',
             difficulty: [2, 3, 4],
-            frequency: 15,
+            frequency: 10,
           },                    
         ]}
       );
@@ -57,7 +57,7 @@ class CourseSelection extends Component {
     const courseTemplate = {      
       subject: 'Math',
       difficulty: [2, 3, 4],
-      frequency: 15,
+      frequency: 10,
     };
     this.setState(state => ({ courses: [...state.courses, courseTemplate] }));
   }
