@@ -1,9 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 import 'styles/App.scss';
 import HowItWorks from 'components/HowItWorks';
