@@ -14,7 +14,6 @@
 * Keep answer validation strictly on server
 * Move single source of gameStateObject onto the server, instead of having a federated model in which clients each keep/modify/broadcast a copy of their own
 * Expand the scope of socket.io from two-user system to many-user system (players could all be on their own phones)
-* Make the MongoDB queries more efficient
 * Create this app before COVID-19 disallowed teachers and students to be together in a physical classroom
 * Have more fun with the project and create more interesting and various questions!
   * (Including a better math problem generator)
