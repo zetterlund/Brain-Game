@@ -1,0 +1,336 @@
+BRAIN GAME PROJECT NOTES
+
+(Note: This document is incomplete and is also missing some information)
+
+
+
+OVERVIEW:
+
+Project owner:
+Sven Zetterlund.  Contact: [REDACTED]
+
+Project description:
+This is an app to be used in the classroom.  The teacher loads the app on the classroom TV and controls it remotely through a mobile device.  The students are split into teams and raise their hands to answer the questions that appear on the screen.
+
+
+
+IMPLEMENTATION:
+
+- Implementation/installation notes are in "implementation_notes.txt" file
+- Project currently hosted on [REDACTED], and requires access to [REDACTED] project credentials
+- Some development code (static files like images) requires production code to be running
+
+On local computer:
+Project work is at [REDACTED]
+
+On server:
+Project work is at [REDACTED]
+
+
+
+ARCHITECTURE:
+
+- Throughout code, to handle concurrency, the initiatingUser's state was modified, and then the change was emitted with the initiatingUser not receiving the emission).  Everything goes through WebSockets.  Could possibly implement WebRTC in the future for an even faster application.
+- (After state changes, propagate changes upward and downward.  Upward for any-time submission-readiness, and downward to child to reflect changes on page.  This architecture could probably be improved by implementing React's Context and Hooks)
+
+
+
+QUESTION CREATION:
+
+* (Definitive version of "all_questions" question set is located at [REDACTED])
+
+Question creation pipeline:
+
+#) Items are organized to be rated
+    #) New items are either brought into temporary raw CSV files or downloaded from online sources.  Contain a minimum of [question, answer].
+    #) Items are cleaned up in "Raw Question Cleanup" notebook, containing at least [question, answer, source, category]
+    #) Questions are saved to "staging _____ questions.csv"
+    #) (Any previous temporary CSV files are deleted)
+#) Questions in "staging _____ questions.csv" are rated
+#) Questions are processed into their final versions
+    #) Questions from "staging _____ questions.csv" are loaded in "Question processing" notebook
+    - Question IDs are assigned
+    - Data types are set for each property of each Question
+    #) Question media are processed
+        #) Downloaded/sourced and saved in project folder at "question_generation/source_images"
+        #) Edited to proper dimensions/formats
+        #) Saved with proper filename in project folder at "question_generation/question_media/images"
+        #) Images are copied into app folder at "brain-game/client/public/images/questions" and then uploaded to server
+    #) Questions are appended to "all_questions.json" master file
+#) In "Upload questions to Mongo" notebook, questions are inserted into the Mongo database/collection "braingame/questions"
+#) (Any "staging _____ questions.csv" files that have been completely rated and uploaded are deleted)
+#) In Mongo, "questions" collection is copied to "questions_backup" for backup.  [Command: 'db.questions.aggregate([ { $match: {} }, { $out: "questions_backup" } ])' ].
+
+When modifying questions, use jupyter notebook instance on server:
+A) (If not already running in "tmux" instance): [REDACTED]
+B) On desktop, run [REDACTED]
+C) (Go to "http://localhost:8889" in browser, enter login token if necessary (password: [REDACTED]), and navigate to [REDACTED])
+
+Miscellaneous notes on Math questions
+- I bone-headedly neglected to include Division problems when generating Math questions!
+- It's possible that duplicate questions have been generated.  I figured that enough of them have been created that some duplicates here and there are no big deal.
+- Rendering:
+  - Math questions are written in 'AsciiMath' format
+  - I'm using the "react-mathjax2" node package, although it uses a legacy "context" API and React gives some warnings about this.  I tried using "react-mathjax-preview" package, which didn't give warnings but the rendering was slow so it wasn't useful.  If looking for a different solution in the future, refactor the math problems from 'AsciiMath' to 'LaTeX' format, as there seem to be better resources for using this format in React.
+
+Question object:
+all_questions: [
+    {
+        id: <int>
+        question: <str>
+        answer: <str>
+        category: <str>
+        format: <str>
+        tagline: <str>
+        difficulty: <int>
+        mediaURL: <str>
+        source: <str>
+        subject: <str>
+        topic: <str>
+        choices: [
+            {
+                label
+                text
+                mediaURL
+                isAnswer
+                choiceID
+            }
+        ]
+    }, ...
+]
+format: {
+    standard,
+    jeopardy,
+    standardImage,
+    multipleChoiceImage,
+    multipleChoiceStandard,
+    (mathematics?)
+}
+
+
+
+SOCKET.IO:
+
+Socket.io was difficult to set up.  Initially I had built the project with Flask and had used the "flask_socketio" library which was built on top of socket.io and which simplified things, but after moving the project to Node.js and using the "socket.io" library directly things are quite complicated.  There are tons of circular dependencies and the whole thing is a bit labyrinthine.  Plus, their documentation is not the best.
+
+There is absolutely a better way to set it up than I have, but I'm tired of sorting it out.
+
+* Rooms available in "io.sockets.adapter.rooms"
+* When joining/leaving user, use the "socket" object available at "io.sockets.sockets[socket.id]".  Additionally, more user information (such as "username") available in "io.sockets.sockets[socket.id]".
+    * ("socket" == "io.sockets.sockets[socket.id]")
+    * (Saving here appears to NOT persist changes)
+    * (Saving to "io.sockets.sockets[socket.id].rooms[roomCode] does NOT persist
+    * (Saving to "io.sockets.adapter.sids[socketID][roomCode] DOES persist
+* However, the list of which rooms a user is in and their roles in those rooms is available and modifiable in "io.sockets.adapter.sids"
+* When updating, objects have to be set in both Rooms and Users objects.  There is surely a way to link the two, but I haven't found it.
+* (Must use adapter to track rooms ("io.sockets.rooms" remains empty after updating))
+* (MISC: "io.sockets.adapter.nsp.sockets" == "io.sockets.sockets")
+
+
+
+APPLICATION USER FLOWCHART:
+
+I would love to use some nice flowchart software to visualize the steps the program goes through, but for now it's just all text.
+It's also not yet complete.
+
+#) Host connects to game Welcome screen
+#) Host clicks "Start game" to commence game setup ("App.beginSetup") > ("this.socket.emit('create game request')")
+#) Room ID is generated for this game setup
+#) Host's app State switches to 'gameSetup'
+#) Server generates room name for this setup
+(Possibly for only one party to use the app.  "Base" user does not depend on "mobile" and should be able to play game with nothing but one computer.)
+
+(If using mobile):
+#) Mobile user connects to game Welcome screen
+#) Mobile user enters in room code 'GLHF' and clicks to enter game lobby
+#) (Mobile user is handed control of game setup.  Host displays message that mobile user is setting up game.)
+
+#) User finishes setting up game parameters and clicks "Begin Competition"
+
+(Game is initialized)
+#) User clicks "Begin Competition" which triggers "beginCompetitionRequest" method in "GameSetup" component, which passes GameSetup state to the "handleBeginCompetitionRequest" method of "App" component.
+    #) "gameConfigObject" is instantiated.  (This object saves the initial setup in order to reset the game).
+    #) "gameStateObject is instantiated.  (This object stores the current game state).
+    #) Teams and various properties of "gameStateObject" are automatically configured.
+    #) Questions are generated
+        #) "generateQuestionSet" function runs, with "(courses, requestedQuestionCount, existingQuestionIDs)" parameters.
+            #) POST request made to "api/questions/generateQuestions"
+            #) (Express Server routes request)
+            #) "router.post('/generateQuestions')" callback function runs
+                #) "generateCourseCounts" creates a frequency distribution of courses (e.g. "courseCounts == { '1': 6, '2': 4 }")
+                #) An array of "getCourseQuestions" promises is initialized, one for each course.  Promise.all() is called on the promises.
+                #) Each promise resolves an object containing an array of questions and a "reachedMaxQuestions" boolean.  If any promise's resolution includes "reachedMax: true", the parent function's "reachedMax" value changes to "true".
+                #) Duplicate questions are removed
+                #) Generated questions and reachedMaxQuestions are sent back to client
+            #) Response JSON of generated questions and reachedMaxQuestions is returned from function
+        #) "gameStateObject" is updated: Returned Question Set is appended to "questions" property, and "reachedMaxQuestions" is updated.
+    #) Competition begins
+        - (Initiating user calls "App.beginCompetition")
+        - (socket.io emits "begin competition request" --> server emits "begin competition" --> clients run "App.beginCompetition")
+
+#) /// Question set is saved to State for both Host and User
+#) /// Host's and User's State update to begin competition
+
+(Competition begins)
+
+Propagation:
+- When user makes a change, changes are propagated through 'gameChangeObject'
+    * Initiating user's state changes
+    * Initiating user emits "update game request"
+    * Server emits "update game"
+    * All other users' states are updated
+
+* Moves to a different question
+    - (componentDidUpdate)
+* Plus/minus points for team
+* Show answer (Additionally, phone will have two buttons: "Show answer on Phone", "Reveal answer to everyone")
+* Reset game (Goes back to gameSetup with existing form parameters in place)
+* More info (popup)
+* End game early
+  * Can do it manually
+  * Possibility: run out of questions before end of game
+* Team reaches threshold for game end
+
+(Game ends)
+#) Game end screen showing winning team
+
+User clicks "leave room":
+#) ("App.handleLeaveRoomRequest()")
+#) Leaving user's App state is cleared
+#) "leave room request" emitted
+#) Server updates io object and emits "update user list" to remaining users in room
+#) Remaining users run App.userLeftRoom which updates their state to reflect changes
+
+
+
+TASKS TO COMPLETE:
+
+Bug fixes:
+* When clicking "Next question" too quickly, when CompetitionScreen state reaches the end of its questions, it will end the game before receiving additional questions
+
+Architecture:
+* Digitalize written component structures and flowchart steps
+* Add 'robots.txt'
+* Add manifest
+* Delete files on server and re-upload them (to account for extraneous files from changing project architecture)
+* Create system of backing up "question_media" directory as well as "all_questions.json"
+* Add Testing functionality to app
+* Implement better error handling
+* Re-write client code to generate a unique client ID instead of publicly exposing Socket.io SocketID to other clients
+
+Miscellaneous:
+* (Empty)
+
+Design:
+* Delete excess font imports (weight variations) after typography has been settled
+
+Bamnit:
+* Remove old application from Bamnit app
+* Fix: in "bamnit.py", "host=("")" doesn't change anything (?)
+* Clean up old code from testing "brain_competition"
+
+Low-priority:
+* Clean up pipeline for existing Jeopardy questions
+* Refactor App component to not have tons of default empty state properties (Instead, account for contingencies within the child component's behavior)
+* Refactor MongoDB calls within API routes ('questions' and 'getSetupOptions') to use async/await
+* Add transitions in GameSetup to Teams and Courses
+* Crop "Qatar flag" image properly
+* Make transitions slower and more dramatic
+* Fix hit box of "previous/next question" button arrows
+
+Future features to add:
+* Add functionality for mobile user to rate the questions (For both difficulty and question quality)
+* Socket.io authentication (https://stackoverflow.com/questions/4753957/socket-io-authentication) and (https://github.com/thebopshoobop/socketio-react)
+* Implement Redis for storing game session information
+* Functionality to cut off really long team names and have a special "display name" property
+* Question Sets to create:
+    * Fahrenheit/Celsius
+    * Which of these countries is not located in <continent>?
+    * // Elements: "which of these is element number X?"
+    * // Crossword "fill-in-the-blank"?
+    * Math problems that include Division
+
+Not going to get to:
+* Add functionality to generate more usernames when concurrent user count surpasses number of preset names
+
+Completed:
+* Ensure that JSON can be passed between Flask and client JS
+* What is the difference between namespaces and rooms in flask_socketio?
+* Using request vs. session to store session in Flask?
+* Change "minus" button to only change score and not advance question
+* Possibly convert values to str() and int() when reading/writing JSON/CSV
+* Change ID generation (for teams, courses, etc) to continue sequentially, rather than inserting "2" into [1,3,4]
+* Add 'Reset Game' functionality
+* Add 'Play Again?' functionality to EndGameScreen
+* Change back starting scores to 0
+* Change updateTeams and updateCourses to use callback functions in "setState"
+* Adjust "disconnecting" route in "server.js" so that changes are propagated to other clients
+* Fix: When user refreshes page in the middle of a game, they are taken back to lobby but they still are in their previous room
+* Layout: Create uniform flex layout for all different screens in App
+* Change footer so that in non-CompetitionScreen pages, it is displayed at the bottom
+* Try to change React import paths to be absolute from project path or 'src', so that in case of moving modules around, imports aren't broken.  (e.g. in App: "import WelcomeScreen from './components/WelcomeScreen/WelcomeScreen';")
+* Add functionality to automatically grab more questions
+* Update "toaster.notify" notifications through application to newer "notification" functions
+* Break apart styles into individual modules for SCSS import
+* Read up on SCSS tricks and best practices
+* "mobileInRoom" component not appearing in "GameSetup" component
+* Fix score box increment-buttons hit boxes (it's the reason scores sometimes go down unintentionally)
+* In CompetitionScreen, going from question to question doesn't scroll the screen to the top of the window
+* Add image-preloading scripts to download question images in advance
+* Combine mathjax.context instances in QuestionArea and make stay there
+* Make EndGameScreen team celebration better
+* Add functionality so that at least 2 teams must be present in GameSetup
+* Add functionality for "random boost" + 5 points for correct answers
+* Create hand-drawn logos for projects; upload to site
+* Ensure that no errors are encountered when a course has no more questions to add to question set during question generation
+* After updating "Frequency" in GameSetup to go from 10 to 100, ensure that question distribution still works (It seems to be generating questions 50/50 regardless of frequency value)
+* Add "Description/Instructions/Help" information to app
+* In GameSetup, allow user to click difficulty checkbox labels to apply onClick effects to checkboxes
+* Within routes/api/questions "questionGeneration", add functionality to more properly (A) Send rejected result to client, and (B) Catch errors that are not just "reject" because no more questions could be found
+* Ensure that no duplicate questions are added to question set during question generation
+* Grab team preset names rather than "New Team" when adding teams in GameSetup
+* Delete 'question' and 'test5' collections from 'braingame' mongo db
+* Create system for selecting multiple question "categories" from a select few topics/categories in GameSetup
+* Clean up course category presentation in GameSetup
+* Add "Loading" status in App component while 'getSetupOptions' function runs
+* Add "options/instructions" popup box
+* Add more Question sets
+* In Competition, improve AdminBar
+* Add "Score Equalizer" functionality
+* Change color of victory text to match 'teamColor' property
+* Change score boxes to add word-wrap to team names and cut off the left-side margin to better fit more team boxes
+* Make default courses better
+* Change multiple-choice answers to be text instead of labels (where format is "multipleChoiceStandard", not "multipleChoiceImage")
+* In "GameSetup" component, move state.setupOptions up to "App" component and pass down as props
+* Add notifications for user when they leave a room
+* Check that socket.io is using WebSockets and not long-polling HTTP
+* Organize socket.io routes in "server.js" into individual modules
+* Change Bamnit header/login display @ 900 px width
+* Update routes in bamnit/projects
+* Ensure that in GameSetup the min/max values of GameOptions / PointsToWin work as expected
+* Go through all setState calls and ensure that functions are pure
+* Fix React "strict mode" warnings in development mode
+* Delete competition styles from Bamnit CSS
+* Finish improving GameSetup design
+* Add CSSTransition to 'StandardImageQuestion' image
+* Adjust CompetitionScreen multiple choice transitions so that they do not affect the control bar
+* Re-write to put setup and control in hands of mobile user
+* Re-write "Instructions" and GameSetup user flow
+* Create responsive desktop-size media query designs across application
+* Upload to github
+* Clean up and export Jupyter notebooks
+* Refactor "subd" route prefix in "server.js" to a middleware function
+* Add functionality in case of tie between multiple teams at end of game
+* Draw picture of me in front of class
+* Clean up this document
+* Create short README
+* Ensure that Google Analytics is functioning properly
+* Include "What would I add in the future" and "What would I have done differently" in README
+* In Competition, improve GameControlBar as well as MobileControl
+
+
+
+UNSORTED:
+* The MongoDB queries in the Express API ("/routes/api/questions.js") could probably be made more efficient.
+* Notifications are imported from 'functions/notification' and are in the form of: notification(type, text, duration) (e.g. "notification('message', 'This is my message', 3000);")
+
