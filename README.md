@@ -4,7 +4,7 @@
 
 ### Split the class into teams and let the competition unfold!
 
-[(What it took to make this project a reality)](client/public/images/classroom_animation.gif?raw=true)
+[(What it took to make this project a reality)](client/public/images/braingame_brainstorm.gif)
 
 #### [Project Notes](project-notes.txt)
 
