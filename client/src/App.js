@@ -407,7 +407,7 @@ export default class App extends Component {
               }
               <footer className="footer">
                   <span>Powered by Promethium</span>
-                  <img src="images/promethium_logo.gif" alt="Promethium" />
+                  <a href="https://promethium-llc.com"><img src="images/promethium_logo.gif" alt="Promethium" /></a>
               </footer>
             </div>
           </Route>
