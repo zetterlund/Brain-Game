@@ -43,13 +43,16 @@ export default class WelcomeScreen extends Component {
     return (
       <div id="WelcomeScreen">
         <div id="header">
-          <img src="images/logo1.gif" alt="Brain Game" />          
+          <img src="images/logo2.gif" alt="Brain Game" />          
         </div>
-        <p>Welcome to the Brain Game!</p>
-        <p>
-          <Link to="/how-it-works">How it Works</Link>
-        </p>
-        <p><span className="link" onClick={this.showInstructions}>View Instructions</span></p>
+        <div id="header-links">
+          <p>
+            <Link to="/how-it-works">How it Works</Link>
+          </p>
+          <p>
+            <span className="link" onClick={this.showInstructions}>View Instructions</span>
+          </p>
+        </div>
         <Instructions
           show={this.state.showInstructions}
           handleClose={this.hideInstructions}
@@ -67,7 +70,6 @@ export default class WelcomeScreen extends Component {
               <label>Room Code:</label>
               <input type="text" name="roomCode" value={this.state.roomCode} onChange={this.handleChange} />
             </div>
-            <br />
             <input type="submit" value="Join game" />
           </form>
         </div>

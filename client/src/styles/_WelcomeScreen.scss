@@ -1,27 +1,60 @@
 #WelcomeScreen {
   flex-grow: 1;
 
+  p {
+    text-align: center;
+  }
+
   a {
     cursor: pointer;
+  }
+
+  .hr {
+    margin: 20px auto;
+    @media #{$desktop} {
+      margin: 30px auto;
+    }
   }
 
   #header {
     text-align: center;
     img {
-      width: 100%;
-      max-width: 260px;
-      margin-top: 20px;
-      filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.7));
+      width: 90%;
+      max-width: 400px;
+      margin-top: 10px;
+      filter: drop-shadow(5px 5px 5px rgba(0,0,0,1));
+      @media #{$desktop} {
+        width: 100%;
+        margin-top: 20px;
+      }
+    }
+  }
+
+  #header-links {
+    margin: 0.8em auto;
+    p {
+      font-size: 1.2em;
+      margin: 0.3em auto;
+    }
+
+    @media #{$desktop} {
+      margin: 1.5em auto;
+      p {
+        margin: 0.5em auto;
+      }
     }
   }
 
   #welcome-to-the-jungle {
     text-align: center;
-
     button {
-      font-size: 1.7rem;
+      font-size: 1.4rem;
       font-weight: 600;
-      padding: 0.5rem 1rem;
+      padding: 0.3rem 0.8rem;
+      @media #{$desktop} {
+        font-size: 1.6rem;
+        padding: 0.5rem 1rem;        
+      }
     }
   }
 
@@ -38,6 +71,7 @@
       width: 100%;
       box-sizing: border-box;
       padding: .1rem 0.8rem;
+      margin-bottom: 0.7rem;
       border-width: 0;
       border-radius: 2rem;
       box-shadow: .1rem .2rem .2rem 0rem rgba(0,0,0,0.4) inset;
@@ -47,7 +81,12 @@
       text-transform: uppercase;
     }
 
-    @media screen and (min-width: 600px) {
+    input[type="submit"] {
+      font-size: 0.9em;
+      font-weight: 600;
+    }
+
+    @media #{$desktop} {
       #room-code-row {
         position: relative;
       }
