@@ -2,13 +2,13 @@
 
 ![Explanation Animation](client/public/images/classroom_animation.gif?raw=true "How it Works")
 
-## Split the class into teams and let the competition unfold!
+### Split the class into teams and let the competition unfold!
 
 [(What it took to make this project a reality)](client/public/images/braingame_brainstorm.gif?raw=true)
 
 ---
 
-### [Project Notes](project-notes.txt)
+### [Project Notes](project-notes.txt?raw=true)
 
 *"If I had to do it over again, what would I do differently?"*
 * Keep answer validation strictly on server
